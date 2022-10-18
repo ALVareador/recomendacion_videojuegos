@@ -14,6 +14,7 @@ dataSteamDataset = pd.read_csv('SteamGames_Description_wthBlank.csv')
 ps = PorterStemmer()
 
 preprocessedText = []
+preprocessedTags = []
 
 for row in dataSteamDataset.itertuples():
     
@@ -29,23 +30,27 @@ for row in dataSteamDataset.itertuples():
 preprocessedData = dataSteamDataset
 preprocessedData['processed_text'] = preprocessedText
 
-for row in dataSteamDataset.itertuples():
+print("processed_text generated")
+
+for row in preprocessedData.itertuples():
     
     
-    text = word_tokenize(row[11]) ## indice de la columna que contiene el texto, en este caso steampy_tags
+    text = word_tokenize(row[11]) ## indice de la columna que contiene el texto, en este caso tags
     ## Remove stop words
     stops = set(stopwords.words("english"))
     text = [ps.stem(w) for w in text if not w in stops and w.isalnum()]
     text = " ".join(text)
     
-    preprocessedText.append(text)
+    preprocessedTags.append(text)
 
-preprocessedData = dataSteamDataset
-preprocessedData['processed_tags'] = preprocessedText
+preprocessedData2 = dataSteamDataset
+preprocessedData2['processed_tags'] = preprocessedTags
 
-preprocessedData.pop('Unnamed: 0')
+print("processed_tags generated")
+
+preprocessedData2.pop('Unnamed: 0')
 
 #Para el notebook liminar estas 2 lineas y substituir por preprocessedData a secas para que lo muestre
-preprocessedData.to_csv('SteamGames_Description_Tokenized.csv', sep =',')
+preprocessedData2.to_csv('SteamGames_Description_Tokenized.csv', sep =',')
 
 print('DataSet tokenized')
